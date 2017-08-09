@@ -38,7 +38,7 @@ public class TechJobs {
                 String columnChoice = getUserSelection("List", columnChoices);
 
                 if (columnChoice.equals("all")) {
-                    printJobs(JobData.findAll());
+                    System.out.println(printJobs(JobData.findAll()));
                 } else {
 
                     ArrayList<String> results = JobData.findAll(columnChoice);
@@ -61,7 +61,14 @@ public class TechJobs {
                 String searchTerm = in.nextLine();
 
                 if (searchField.equals("all")) {
-                    System.out.println("Search all fields not yet implemented.");
+                    for (String k:columnChoices.keySet()){
+                        if (k!= "all"){
+                            System.out.println(k);
+                            System.out.println(searchTerm);
+                            printJobs(JobData.findByColumnAndValue(k,searchTerm));
+                        }
+
+                    }
                 } else {
                     printJobs(JobData.findByColumnAndValue(searchField, searchTerm));
                 }
@@ -109,8 +116,14 @@ public class TechJobs {
     }
 
     // Print a list of jobs
-    private static void printJobs(ArrayList<HashMap<String, String>> someJobs) {
-
-        System.out.println("printJobs is not implemented yet");
+    private static StringBuilder printJobs(ArrayList<HashMap<String, String>> someJobs) {
+        StringBuilder jobsList = new StringBuilder();
+        for (HashMap job:someJobs){
+            jobsList.append("\n****\n");
+            for (Object line:job.keySet()){
+                 jobsList.append(line +": "+ job.get(line) + "\n");
+             }jobsList.append("****\n");
+        }
+        return jobsList;
     }
 }
