@@ -19,6 +19,7 @@ public class TechJobs {
         columnChoices.put("employer", "Employer");
         columnChoices.put("location", "Location");
         columnChoices.put("position type", "Position Type");
+        columnChoices.put("name", "Name");
         columnChoices.put("all", "All");
 
         // Top-level menu options
@@ -27,6 +28,8 @@ public class TechJobs {
         actionChoices.put("list", "List");
 
         System.out.println("Welcome to LaunchCode's TechJobs App!");
+
+        //Top level search string
 
         // Allow the user to search until they manually quit
         while (true) {
@@ -54,27 +57,20 @@ public class TechJobs {
             } else { // choice is "search"
 
                 // How does the user want to search (e.g. by skill or employer)
-                String searchField = getUserSelection("Search by:", columnChoices);
+                String columnChoice = getUserSelection("Search by:",columnChoices);
+                String filteredSearch = getUserSearch("\n" + "What would you like to search for?");
 
-                // What is their search term?
-                System.out.println("\nSearch term: ");
-                String searchTerm = in.nextLine();
+                if (columnChoice.equals("all")) {
+                    // What is their search term?
+                        System.out.println(printJobs(JobData.findByValue(columnChoices,filteredSearch)));
 
-                if (searchField.equals("all")) {
-                    for (String k:columnChoices.keySet()){
-                        if (k!= "all"){
-                            System.out.println(k);
-                            System.out.println(searchTerm);
-                            printJobs(JobData.findByColumnAndValue(k,searchTerm));
-                        }
-
-                    }
-                } else {
-                    printJobs(JobData.findByColumnAndValue(searchField, searchTerm));
+                }else {
+                        System.out.println(printJobs(JobData.findByColumnAndValue(columnChoice,filteredSearch)));
                 }
             }
         }
     }
+
 
     // ﻿Returns the key of the selected item from the choices Dictionary
     private static String getUserSelection(String menuHeader, HashMap<String, String> choices) {
@@ -115,6 +111,14 @@ public class TechJobs {
         return choiceKeys[choiceIdx];
     }
 
+    // Returns the string from user's search term
+    private static String getUserSearch(String menuHeader){
+        System.out.println("\n" + menuHeader);
+        String searchTerm= in.next();
+        return searchTerm;
+
+    }
+
     // Print a list of jobs
     private static StringBuilder printJobs(ArrayList<HashMap<String, String>> someJobs) {
         StringBuilder jobsList = new StringBuilder();
@@ -123,7 +127,10 @@ public class TechJobs {
             for (Object line:job.keySet()){
                  jobsList.append(line +": "+ job.get(line) + "\n");
              }jobsList.append("****\n");
+        }if (jobsList.length()==0){
+            return jobsList.append("\n****\n No jobs found that match your request \n****\n");
         }
         return jobsList;
     }
+
 }
