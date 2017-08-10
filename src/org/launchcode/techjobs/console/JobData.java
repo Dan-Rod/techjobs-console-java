@@ -20,7 +20,7 @@ public class JobData {
     private static Boolean isDataLoaded = false;
 
     private static ArrayList<HashMap<String, String>> allJobs;
-
+    private static ArrayList<HashMap<String,String>> uJobs;
     /**
      * Fetch list of all values from loaded data,
      * without duplicates, for a given column.
@@ -73,10 +73,9 @@ public class JobData {
         ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
 
         for (HashMap<String, String> row : allJobs) {
-
             String aValue = row.get(column);
-
-            if (aValue.contains(value)) {
+            String uValue = aValue.toLowerCase();
+            if (uValue.contains(value.toLowerCase())) {
                 jobs.add(row);
             }
         }
@@ -94,7 +93,8 @@ public class JobData {
                 for (HashMap<String, String> row : allJobs) {
 
                     String aValue = row.get(column);
-                    if (aValue.contains(value)) {
+                    String uValue = aValue.toLowerCase();
+                    if (uValue.contains(value.toLowerCase())) {
                         jobs.add(row);
                     continue;
                     }
